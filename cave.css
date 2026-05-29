@@ -1,0 +1,689 @@
+:root {
+    --pixel-size: 5px;
+    --grid-cell: calc(var(--pixel-size) * 32);
+    --bg: #2c2c2c;
+    --char-size: calc(var(--pixel-size) * 32);
+
+    --tile-w: calc(var(--pixel-size) * 118);
+    --tile-h: calc(var(--pixel-size) * 90);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: var(--bg);
+    margin: 0;
+    padding: 0;
+}
+
+.pixel-art {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.overlay {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.footer {
+    font-family: "consolas", sans-serif;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 95px;
+}
+
+.footer p {
+    color: #fff;
+}
+
+.footer h2 {
+    color: #fff;
+    font-size: 18px;
+}
+
+.camera {
+    transform: scale(0.96);
+    border-radius: 65px;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.ocean {
+    width: calc(var(--pixel-size) * 910);
+    height: calc(var(--pixel-size) * 730);
+    position: absolute;
+    top: -750px;
+    left: -750px;
+    background-image: url("/assets/tiles/waters.png");
+    background-repeat: repeat;
+    background-size: calc(var(--grid-cell) * 2) auto;
+    animation: oceanWaves 3s steps(8) infinite;
+    z-index: -1;
+}
+
+@keyframes oceanWaves {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: calc(var(--grid-cell) * 2) 0;
+    }
+}
+
+.map {
+    image-rendering: pixelated;
+    background-image: url("/assets/maps/cave_map.png");
+    background-size: cover;
+    width: calc(var(--pixel-size) * 405);
+    height: calc(var(--pixel-size) * 325);
+    position: relative;
+}
+
+.character {
+    width: var(--char-size);
+    height: var(--char-size);
+    position: absolute;
+    overflow: hidden;
+    z-index: 2;
+    transform-origin: top left;
+    margin-left: calc(var(--char-size) / -2);
+    margin-top: calc(var(--char-size) / -2);
+}
+
+/* ════════════════════════════════════════════════
+   SPRITESHEETS  —  idle & run only
+   Idle : 768×256px → 6 frames × 4 rows
+   Run  : 384×256px → 8 frames × 4 rows
+════════════════════════════════════════════════ */
+.character_spritesheet_idle,
+.character_spritesheet_run {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    display: none;
+}
+
+.character_spritesheet_idle {
+    background-image: url("/assets/sprites/Swordsman_lvl1_Idle_with_shadow.png");
+    width: calc(var(--grid-cell) * 12);
+    height: calc(var(--grid-cell) * 12);
+}
+
+.character_spritesheet_run {
+    background-image: url("/assets/sprites/Swordsman_lvl1_Run_with_shadow.png");
+    width: calc(var(--grid-cell) * 8);
+    height: calc(var(--grid-cell) * 8);
+}
+
+.character[walking="false"] .character_spritesheet_idle {
+    display: block;
+}
+
+.character[walking="true"] .character_spritesheet_run {
+    display: block;
+}
+
+.character[facing="down"] .character_spritesheet_idle,
+.character[facing="down"] .character_spritesheet_run {
+    background-position-y: calc(var(--char-size) * 0);
+}
+
+.character[facing="left"] .character_spritesheet_idle,
+.character[facing="left"] .character_spritesheet_run {
+    background-position-y: calc(var(--char-size) * -1);
+}
+
+.character[facing="right"] .character_spritesheet_idle,
+.character[facing="right"] .character_spritesheet_run {
+    background-position-y: calc(var(--char-size) * -2);
+}
+
+.character[facing="up"] .character_spritesheet_idle,
+.character[facing="up"] .character_spritesheet_run {
+    background-position-y: calc(var(--char-size) * -3);
+}
+
+.character[walking="false"] .character_spritesheet_idle {
+    animation: idleAnim 1.0s steps(6) infinite;
+}
+
+@keyframes idleAnim {
+    from {
+        transform: translate3d(0%, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.character[walking="true"] .character_spritesheet_run {
+    animation: runAnim 0.55s steps(8) infinite;
+}
+
+@keyframes runAnim {
+    from {
+        transform: translate3d(0%, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+/* ── assets ── */
+.asset {
+    position: absolute;
+    image-rendering: pixelated;
+    left: var(--ax);
+    top: var(--ay);
+    pointer-events: none;
+}
+
+.bottom_wall {
+    width: calc(var(--pixel-size) * 356);
+    height: calc(var(--pixel-size) * 22);
+    background: url("/assets/maps/bottom_wall.png") no-repeat;
+    background-size: contain;
+}
+
+.bottom_wall_accent {
+    width: calc(var(--pixel-size) * 120);
+    height: calc(var(--pixel-size) * 27);
+    background: url("/assets/maps/bottom_wall_accent.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_1 {
+    width: calc(var(--pixel-size) * 45);
+    height: calc(var(--pixel-size) * 205);
+    background: url("/assets/maps/middle_wall_1.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_2 {
+    width: calc(var(--pixel-size) * 55);
+    height: calc(var(--pixel-size) * 130);
+    background: url("/assets/maps/middle_wall_2.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_4 {
+    width: calc(var(--pixel-size) * 204/2.85);
+    height: calc(var(--pixel-size) * 153/2);
+    background: url("/assets/maps/middle_wall_4.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_5 {
+    width: calc(var(--pixel-size) * 116/2.85);
+    height: calc(var(--pixel-size) * 103/2);
+    background: url("/assets/maps/middle_wall_5.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_6 {
+    width: calc(var(--pixel-size) * 198/2.85);
+    height: calc(var(--pixel-size) * 106/2);
+    background: url("/assets/maps/middle_wall_6.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_7 {
+    width: calc(var(--pixel-size) * 196/2.85);
+    height: calc(var(--pixel-size) * 67/2);
+    background: url("/assets/maps/middle_wall_7.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_8 {
+    width: calc(var(--pixel-size) * 204/2.85);
+    height: calc(var(--pixel-size) * 65/2);
+    background: url("/assets/maps/middle_wall_8.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_9 {
+    width: calc(var(--pixel-size) * 78/2.85);
+    height: calc(var(--pixel-size) * 65/2);
+    background: url("/assets/maps/middle_wall_9.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_10 {
+    width: calc(var(--pixel-size) * 82/2.85);
+    height: calc(var(--pixel-size) * 166/2);
+    background: url("/assets/maps/middle_wall_10.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_11 {
+    width: calc(var(--pixel-size) * 309/2.85);
+    height: calc(var(--pixel-size) * 135/2);
+    background: url("/assets/maps/middle_wall_11.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_12 {
+    width: calc(var(--pixel-size) * 326/2.85);
+    height: calc(var(--pixel-size) * 109/2);
+    background: url("/assets/maps/middle_wall_12.png") no-repeat;
+    background-size: contain;
+}
+
+.middle_wall_13 {
+    width: calc(var(--pixel-size) * 253/2.85);
+    height: calc(var(--pixel-size) * 49/2);
+    background: url("/assets/maps/middle_wall_13.png") no-repeat;
+    background-size: contain;
+}
+
+.gate {
+    width: calc(var(--pixel-size) * 124/2.85);
+    height: calc(var(--pixel-size) * 128/2);
+    background: url("/assets/maps/gate.png") no-repeat;
+    background-size: contain;
+}
+
+/* ─── EXIT PROMPT ─── */
+#cave_exit_prompt {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-family: "Consolas", monospace;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+#cave_exit_prompt kbd {
+    background: #444;
+    border: 1px solid #888;
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-size: 13px;
+}
+
+#cave_exit_prompt.hidden {
+    display: none;
+}
+
+/* ─────────────────────────────────────────────
+   RETRO GAME OVER MODAL OVERLAY UI
+   ───────────────────────────────────────────── */
+#game-over-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(12, 2, 2, 0.85);
+    /* Dark crimson tint backdrop */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    /* Positions completely over game camera viewports */
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+}
+
+#game-over-screen.go-hidden {
+    display: none !important;
+    opacity: 0;
+}
+
+.go-box {
+    background: #141416;
+    border: calc(var(--pixel-size) * 1) solid #ff2e63;
+    padding: 40px 60px;
+    text-align: center;
+    font-family: "Consolas", monospace;
+    box-shadow: 0 0 30px rgba(255, 46, 99, 0.3);
+    border-radius: 12px;
+}
+
+.go-title {
+    color: #ff2e63;
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    letter-spacing: 2px;
+    text-shadow: 0px 0px 8px rgba(255, 46, 99, 0.6);
+}
+
+.go-subtitle {
+    color: #8e8e93;
+    font-size: 14px;
+    margin: 0 0 40px 0;
+}
+
+.go-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.go-option {
+    color: #444446;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: color 0.1s ease;
+}
+
+.go-option kbd {
+    background: #2c2c2e;
+    border: 1px solid #48484a;
+    color: #8e8e93;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+}
+
+/* Hover/Active states */
+.go-option.active,
+.go-option:hover {
+    color: #ffffff;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+}
+
+.go-option .pointer {
+    visibility: hidden;
+    color: #ff2e63;
+}
+
+.go-option.active .pointer {
+    visibility: visible;
+    animation: pointerBlink 0.6s steps(2) infinite;
+}
+
+@keyframes pointerBlink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ─────────────────────────────────────────────
+   HEADER & SLIME QUANTITY UI
+   ───────────────────────────────────────────── */
+.header {
+    position: fixed;
+    top: 25px;
+    left: 95px;
+    font-family: "Consolas", monospace;
+    z-index: 11;
+}
+
+/* ─────────────────────────────────────────────
+   HEALTH BAR (3 Hearts)
+   ───────────────────────────────────────────── */
+.health-bar {
+    position: fixed;
+    top: 30px;
+    left: 95px;
+    display: flex;
+    gap: 12px;
+    z-index: 11;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+}
+
+.heart {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    transition: transform 0.1s ease;
+}
+
+/* Pure CSS structural heart drawing */
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 12px;
+    height: 20px;
+    border-radius: 12px 12px 0 0;
+    transition: background 0.2s ease;
+}
+
+.heart::before {
+    left: 12px;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+}
+
+.heart::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100%;
+}
+
+/* States for Full vs Empty hearts */
+.heart.full::before,
+.heart.full::after {
+    background: #ff2e63;
+}
+
+.heart.empty::before,
+.heart.empty::after {
+    background: #444446;
+}
+
+/* ─────────────────────────────────────────────
+   CHARACTER ANIMATION & HURT STATUS FIX
+   ───────────────────────────────────────────── */
+.character_spritesheet_hurt {
+    background-image: url("/assets/sprites/Swordsman_lvl1_Hurt_with_shadow.png");
+    /* Exactly 5 frames wide per row. 500% lets background-position percentage scale cleanly */
+    background-size: 500% 400%;
+    width: var(--char-size);
+    height: var(--char-size);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    display: none;
+}
+
+/* Control visibility flags using attribute selectors */
+.character[status="hurt"] .character_spritesheet_idle,
+.character[status="hurt"] .character_spritesheet_run {
+    display: none !important;
+}
+
+.character[status="hurt"] .character_spritesheet_hurt {
+    display: block;
+    animation: hurtAnim 0.35s steps(5) infinite;
+}
+
+/* Handles step translations smoothly across a 5-frame loop */
+@keyframes hurtAnim {
+    from {
+        background-position-x: 0%;
+    }
+
+    to {
+        background-position-x: 125%;
+    }
+
+    /* Maps cleanly to end bounds */
+}
+
+/* Y positions mapped safely to character sizes */
+.character[status="hurt"][facing="down"] .character_spritesheet_hurt {
+    background-position-y: calc(var(--char-size) * 0);
+}
+
+.character[status="hurt"][facing="left"] .character_spritesheet_hurt {
+    background-position-y: calc(var(--char-size) * -1);
+}
+
+.character[status="hurt"][facing="right"] .character_spritesheet_hurt {
+    background-position-y: calc(var(--char-size) * -2);
+}
+
+.character[status="hurt"][facing="up"] .character_spritesheet_hurt {
+    background-position-y: calc(var(--char-size) * -3);
+}
+
+/* Invincibility flashing feedback */
+.character[status="hurt"] {
+    animation: hurtFlash 0.1s linear infinite, hurtAnim 0.35s steps(5) infinite;
+}
+
+@keyframes hurtFlash {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+}
+
+.character[status="dead"] {
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+}
+
+/* ─────────────────────────────────────────────
+   CHARACTER DEATH ANIMATION ENGINE (7 FRAMES)
+   ───────────────────────────────────────────── */
+.character_spritesheet_death {
+    background-image: url("/assets/sprites/Swordsman_lvl1_Death_with_shadow.png");
+    /* 7 frames wide, 4 directions tall */
+    background-size: 700% 400%;
+    width: var(--char-size);
+    height: var(--char-size);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    display: none;
+}
+
+/* Hide all other states when dead */
+.character[status="dead"] .character_spritesheet_idle,
+.character[status="dead"] .character_spritesheet_run,
+.character[status="dead"] .character_spritesheet_hurt {
+    display: none !important;
+}
+
+.character[status="dead"] .character_spritesheet_death {
+    display: block;
+    /* runs exactly ONCE, stops on frame 7 (forwards) */
+    animation: deathAnim 0.7s steps(7) forwards;
+}
+
+@keyframes deathAnim {
+    from {
+        background-position-x: 0%;
+    }
+
+    to {
+        background-position-x: 100%;
+    }
+}
+
+/* Row alignments mapped to your custom facing direction variables */
+.character[status="dead"][facing="down"] .character_spritesheet_death {
+    background-position-y: calc(var(--char-size) * 0);
+}
+
+.character[status="dead"][facing="left"] .character_spritesheet_death {
+    background-position-y: calc(var(--char-size) * -1);
+}
+
+.character[status="dead"][facing="right"] .character_spritesheet_death {
+    background-position-y: calc(var(--char-size) * -2);
+}
+
+.character[status="dead"][facing="up"] .character_spritesheet_death {
+    background-position-y: calc(var(--char-size) * -3);
+}
+
+#cave-darkness {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Allows clicks/interactions to pass right through */
+    z-index: 999;        /* Sits cleanly on top of the game map, but beneath UI screens */
+    
+    /* Creates a circular window mask. 
+       Adjust '120px' to make your lantern light larger or smaller.
+       Adjust '160px' to soften or sharpen the light gradient fade edge.
+    */
+    background: radial-gradient(
+        circle 250px at var(--px, 50%) var(--py, 50%),
+        transparent 0%,
+        rgba(0, 0, 0, 0.4) 60%,
+        rgba(10, 10, 15, 0.98) 100%
+    );
+    animation: lanternFlicker 4s infinite alternate ease-in-out;
+}
+
+@keyframes lanternFlicker {
+
+    0%,
+    100% {
+        filter: contrast(100%) brightness(100%);
+    }
+
+    25% {
+        filter: contrast(102%) brightness(98%);
+    }
+
+    50% {
+        filter: contrast(97%) brightness(103%);
+    }
+
+    75% {
+        filter: contrast(101%) brightness(96%);
+    }
+}

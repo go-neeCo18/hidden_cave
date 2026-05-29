@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cave</title>
+    <link rel="stylesheet" href="cave.css">
+</head>
+
+<body>
+    <div class="overlay">
+        <div class="footer">
+            <h2>Created by Niko Go</h2>
+            <p>Use arrow keys / WASD to move &nbsp;|&nbsp; Hold Shift to sprint &nbsp;|&nbsp; Press "/" to toggle debug
+                lines</p>
+        </div>
+
+        <div class="health-bar" id="health-bar">
+        </div>
+    </div>
+
+    <div id="game-over-screen" class="go-hidden">
+        <div class="go-box pixel-art">
+            <h1 class="go-title">DIED INSIDE THE CAVE</h1>
+            <p class="go-subtitle">Your journey has ended here.</p>
+    
+            <div class="go-menu">
+                <div class="go-option active" data-action="respawn">
+                    <span class="pointer">▶</span> TRY AGAIN <kbd>↵ Enter</kbd>
+                </div>
+                <div class="go-option" data-action="exit">
+                    <span class="pointer">▶</span> RETURN TO SURFACE <kbd>Esc</kbd>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cave-darkness"></div>
+
+    <div class="camera">
+        <div class="ocean"></div>
+
+        <div class="map pixel-art">
+            <div class="asset bottom_wall" data-x="140" data-y="225" data-h="100" style="--ax:0px; --ay:1515px;"></div>
+            <div class="asset bottom_wall_accent" data-x="140" data-y="225" data-h="100"
+                style="--ax:1147px; --ay:1440px;"></div>
+            <div class="asset middle_wall_1" data-x="140" data-y="155" data-h="110" style="--ax:260px; --ay:375px;">
+            </div>
+            <div class="asset middle_wall_2" data-x="140" data-y="155" data-h="110" style="--ax:390px; --ay:755px;">
+            </div>
+            <div class="asset middle_wall_4" data-x="140" data-y="25" data-h="110" style="--ax:398px; --ay:500px;">
+            </div>
+            <div class="asset middle_wall_5" data-x="140" data-y="55" data-h="10" style="--ax:534px; --ay:310px;"></div>
+            <div class="asset middle_wall_6" data-x="140" data-y="25" data-h="105" style="--ax:800px; --ay:552px;">
+            </div>
+            <div class="asset middle_wall_7" data-x="140" data-y="25" data-h="105" style="--ax:803px; --ay:300px;">
+            </div>
+            <div class="asset middle_wall_8" data-x="140" data-y="15" data-h="200" style="--ax:727px; --ay:869px;">
+            </div>
+            <div class="asset middle_wall_9" data-x="140" data-y="15" data-h="200" style="--ax:942px; --ay:809px;">
+            </div>
+            <div class="asset middle_wall_10" data-x="140" data-y="15" data-h="200" style="--ax:1280px; --ay:570px;">
+            </div>
+            <div class="asset middle_wall_11" data-x="140" data-y="15" data-h="200" style="--ax:1275px; --ay:300px;">
+            </div>
+            <div class="asset middle_wall_12" data-x="140" data-y="20" data-h="250" style="--ax:1415px; --ay:1145px;">
+            </div>
+            <div class="asset middle_wall_13" data-x="140" data-y="20" data-h="250" style="--ax:1540px; --ay:1078px;">
+            </div>
+            <div class="asset gate" data-x="140" data-y="20" data-h="500" style="--ax:1774px; --ay:1332px;"></div>
+
+            <div class="character" facing="down" walking="false" status="alive" style="z-index:1;">
+                <div class="character_spritesheet_idle pixel-art"></div>
+                <div class="character_spritesheet_run pixel-art"></div>
+                <div class="character_spritesheet_hurt pixel-art"></div>
+                <div class="character_spritesheet_death pixel-art"></div>
+            </div>
+        </div>
+    </div>
+    <script src="cave.js"></script>
+</body>
+
+</html>

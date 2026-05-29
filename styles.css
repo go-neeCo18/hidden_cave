@@ -1,0 +1,762 @@
+:root {
+    --pixel-size: 5px;
+    --grid-cell: calc(var(--pixel-size) * 32);
+    --bg: #2c2c2c;
+    --char-size: calc(var(--pixel-size) * 32);
+
+    --tile-w: calc(var(--pixel-size) * 118);
+    --tile-h: calc(var(--pixel-size) * 90);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background: var(--bg);
+    margin: 0;
+    padding: 0;
+}
+
+
+.pixel-art {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.overlay {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.pop_up {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+
+    background:
+        radial-gradient(circle at center,
+            rgba(255, 255, 255, 0.08),
+            rgba(0, 0, 0, 0.82));
+
+    backdrop-filter: blur(6px);
+    animation: popupFade 0.2s ease;
+}
+
+.pop_up_content {
+    position: relative;
+
+    width: 500px;
+    max-width: 85vw;
+
+    padding: 38px 35px;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.98) 0%,
+            rgba(236, 236, 236, 0.96) 100%);
+
+    border: 4px solid rgba(255, 255, 255, 0.8);
+
+    box-shadow:
+        0 0 0 6px rgba(0, 0, 0, 0.15),
+        0 15px 50px rgba(0, 0, 0, 0.45),
+        0 0 40px rgba(255, 196, 0, 0.18);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    font-family: "consolas", monospace;
+
+    animation: popupEnter 0.22s ease;
+}
+
+/* TOP GLOW */
+.pop_up_content::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 70%;
+    height: 4px;
+
+    border-radius: 999px;
+
+    background: linear-gradient(90deg,
+            transparent,
+            #ffc400,
+            transparent);
+
+    filter: blur(1px);
+}
+
+/* TITLE */
+#pop_up_text {
+    margin: 0;
+
+    font-size: 52px;
+    font-weight: 900;
+
+    color: #2d2d2d;
+
+    letter-spacing: -3px;
+    line-height: 1;
+
+    text-align: center;
+
+    text-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.8),
+        0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* SUBTEXT */
+#pop_up_text2 {
+    margin-top: 14px;
+
+    font-size: 15px;
+    line-height: 1.5;
+
+    color: #5c5c5c;
+
+    text-align: center;
+
+    max-width: 360px;
+}
+
+/* BUTTON */
+.close {
+    margin-top: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 170px;
+    height: 52px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(180deg,
+            #ffc400 0%,
+            #ffb300 100%);
+
+    color: #fff;
+
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+    user-select: none;
+
+    border: 2px solid rgba(255, 255, 255, 0.5);
+
+    box-shadow:
+        0 6px 0 #d18f00,
+        0 10px 20px rgba(255, 196, 0, 0.35);
+
+    transition:
+        transform 0.08s ease,
+        box-shadow 0.08s ease,
+        filter 0.15s ease;
+}
+
+.close:hover {
+    filter: brightness(1.08);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 0 #d18f00,
+        0 14px 24px rgba(255, 196, 0, 0.45);
+}
+
+.close:active {
+    transform: translateY(4px);
+
+    box-shadow:
+        0 2px 0 #d18f00,
+        0 5px 10px rgba(255, 196, 0, 0.25);
+}
+
+/* ANIMATIONS */
+@keyframes popupFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popupEnter {
+    from {
+        opacity: 0;
+        transform:
+            translateY(20px) scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0) scale(1);
+    }
+}
+
+.key_image {
+    --key-size: 70px;
+
+    position: relative;
+
+    width: var(--key-size);
+    height: var(--key-size);
+
+    margin-bottom: 22px;
+
+    overflow: hidden;
+
+    image-rendering: pixelated;
+
+    filter:
+        drop-shadow(0 0 12px #fff) drop-shadow(0 0 20px #ffc400);
+
+    animation: floatKey 1.8s ease-in-out infinite;
+}
+
+@keyframes floatKey {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+.footer {
+    font-family: "consolas", sans-serif;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 15px;
+}
+
+.footer p {
+    color: #fff;
+    font-size: 12px;
+}
+
+.footer h2 {
+    color: #fff;
+    font-size: 12px;
+}
+
+.camera {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.ocean {
+    width: calc(var(--pixel-size) * 910);
+    height: calc(var(--pixel-size) * 730);
+    position: absolute;
+    top: -750px;
+    left: -750px;
+    background-image: url("/assets/tiles/Ocean_SpriteSheet.png");
+    background-repeat: repeat;
+    background-size: calc(var(--grid-cell) * 2) auto;
+    animation: oceanWaves 3s steps(8) infinite;
+    z-index: -1;
+}
+
+@keyframes oceanWaves {
+    from {
+        background-position-x: 0px;
+    }
+
+    to {
+        background-position-x: calc(var(--grid-cell) * -8);
+    }
+}
+
+.pond {
+    width: var(--tile-w);
+    height: var(--tile-h);
+    background-image: url("/assets/tiles/ocean-autotiles-anim.png");
+    position: absolute;
+    top: 780px;
+    left: 695px;
+    background-repeat: repeat;
+    background-size: calc(var(--tile-w) * 4) var(--tile-h);
+    animation: waterFlow 1.0s steps(4) infinite;
+    z-index: -1;
+}
+
+@keyframes waterFlow {
+    from {
+        background-position-x: 0px;
+    }
+
+    to {
+        background-position-x: calc(var(--tile-w) * -4);
+    }
+}
+
+.map {
+    image-rendering: pixelated;
+    background-image: url("/assets/maps/field.png");
+    background-size: cover;
+    width: calc(var(--pixel-size) * 610);
+    height: calc(var(--pixel-size) * 430);
+    position: relative;
+}
+
+.character {
+    width: var(--char-size);
+    height: var(--char-size);
+    position: absolute;
+    overflow: hidden;
+    z-index: 2;
+    transform-origin: top left;
+    margin-left: calc(var(--char-size) / -2);
+    margin-top: calc(var(--char-size) / -2);
+}
+
+/* ════════════════════════════════════════════════
+   SPRITESHEETS  —  idle & run only
+   Idle : 768×256px → 6 frames × 4 rows
+   Run  : 384×256px → 8 frames × 4 rows
+════════════════════════════════════════════════ */
+.character_spritesheet_idle,
+.character_spritesheet_run {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    display: none;
+}
+
+.character_spritesheet_idle {
+    background-image: url("/assets/sprites/Swordsman_lvl1_Idle_with_shadow.png");
+    width: calc(var(--grid-cell) *12);
+    height: calc(var(--grid-cell) *12);
+}
+
+.character_spritesheet_run {
+    background-image: url("/assets/sprites/Swordsman_lvl1_Run_with_shadow.png");
+    width: calc(var(--grid-cell) * 8);
+    height: calc(var(--grid-cell) * 8);
+}
+
+.character[walking="false"] .character_spritesheet_idle {
+    display: block;
+}
+
+.character[walking="true"] .character_spritesheet_run {
+    display: block;
+}
+
+.character[facing="down"] .character_spritesheet_idle,
+.character[facing="down"] .character_spritesheet_run {
+    background-position-y: calc(var(--char-size) * 0);
+}
+
+.character[facing="left"] .character_spritesheet_idle,
+.character[facing="left"] .character_spritesheet_run {
+    background-position-y: calc(var(--char-size) * -1);
+}
+
+.character[facing="right"] .character_spritesheet_idle,
+.character[facing="right"] .character_spritesheet_run {
+    background-position-y: calc(var(--char-size) * -2);
+}
+
+.character[facing="up"] .character_spritesheet_idle,
+.character[facing="up"] .character_spritesheet_run {
+    background-position-y: calc(var(--char-size) * -3);
+}
+
+.character[walking="false"] .character_spritesheet_idle {
+    animation: idleAnim 1.0s steps(6) infinite;
+}
+
+@keyframes idleAnim {
+    from {
+        transform: translate3d(0%, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.character[walking="true"] .character_spritesheet_run {
+    animation: runAnim 0.55s steps(8) infinite;
+}
+
+@keyframes runAnim {
+    from {
+        transform: translate3d(0%, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+/* ── assets ── */
+.asset {
+    position: absolute;
+    image-rendering: pixelated;
+    left: var(--ax);
+    top: var(--ay);
+}
+
+.floating_key {
+    --key-size: 45px;
+    image-rendering: pixelated;
+    width: var(--key-size);
+    height: var(--key-size);
+    overflow: hidden;
+    filter: drop-shadow(0 0 15px #ffffff) drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 15px #ffc400);
+}
+
+.floating_key::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(var(--key-size) * 24);
+    height: var(--key-size);
+    background: url("/assets/objects/key_32x32_24f.png") no-repeat left top;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    animation: keyAnim 1.0s steps(24) infinite;
+}
+
+@keyframes keyAnim {
+    from {
+        transform: translate3d(0%, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+/* bush: semi-transparent when player is behind */
+.asset.bush {
+    transition: opacity 0.2s;
+}
+
+.asset.bush.player-behind {
+    opacity: 0.45;
+}
+
+.house {
+    width: calc(var(--pixel-size) * 74);
+    height: calc(var(--pixel-size) * 74);
+    background: url("/assets/objects/House.png") no-repeat;
+    background-size: contain;
+}
+
+.tree1 {
+    width: calc(var(--pixel-size)*74);
+    height: calc(var(--pixel-size)*74);
+    background: url("/assets/objects/tree1.png") no-repeat;
+    background-size: contain;
+}
+
+.tree2 {
+    width: calc(var(--pixel-size)*74);
+    height: calc(var(--pixel-size)*74);
+    background: url("/assets/objects/tree2.png") no-repeat;
+    background-size: contain;
+}
+
+.tree3 {
+    width: calc(var(--pixel-size)*74);
+    height: calc(var(--pixel-size)*74);
+    background: url("/assets/objects/tree3.png") no-repeat;
+    background-size: contain;
+}
+
+.tree4 {
+    width: calc(var(--pixel-size)*74);
+    height: calc(var(--pixel-size)*74);
+    background: url("/assets/objects/tree4.png") no-repeat;
+    background-size: contain;
+}
+
+.tree5 {
+    width: calc(var(--pixel-size)*55);
+    height: calc(var(--pixel-size)*55);
+    background: url("/assets/objects/tree5.png") no-repeat;
+    background-size: contain;
+}
+
+.rock1 {
+    width: calc(var(--pixel-size)*40);
+    height: calc(var(--pixel-size)*40);
+    background: url("/assets/objects/rock1.png") no-repeat;
+    background-size: contain;
+}
+
+.rock2 {
+    width: calc(var(--pixel-size)*40);
+    height: calc(var(--pixel-size)*40);
+    background: url("/assets/objects/rock2.png") no-repeat;
+    background-size: contain;
+}
+
+.rock3 {
+    width: calc(var(--pixel-size)*38);
+    height: calc(var(--pixel-size)*38);
+    background: url("/assets/objects/rock3.png") no-repeat;
+    background-size: contain;
+}
+
+.rock4 {
+    width: calc(var(--pixel-size)*35);
+    height: calc(var(--pixel-size)*35);
+    background: url("/assets/objects/rock4.png") no-repeat;
+    background-size: contain;
+}
+
+.log1 {
+    width: calc(var(--pixel-size)*45);
+    height: calc(var(--pixel-size)*35);
+    background: url("/assets/objects/log1.png") no-repeat;
+    background-size: contain;
+}
+
+.log2 {
+    width: calc(var(--pixel-size)*45);
+    height: calc(var(--pixel-size)*35);
+    background: url("/assets/objects/log2.png") no-repeat;
+    background-size: contain;
+}
+
+.mushroom1 {
+    width: calc(var(--pixel-size)*30);
+    height: calc(var(--pixel-size)*35);
+    background: url("/assets/objects/mushroom1.png") no-repeat;
+    background-size: contain;
+}
+
+.scarecrow {
+    width: calc(var(--pixel-size)*40);
+    height: calc(var(--pixel-size)*55);
+    background: url("/assets/objects/scarecrow.png") no-repeat;
+    background-size: contain;
+}
+
+.bush1 {
+    width: calc(var(--pixel-size)*45);
+    height: calc(var(--pixel-size)*40);
+    background: url("/assets/objects/bush1.png") no-repeat;
+    background-size: contain;
+}
+
+.bush2 {
+    width: calc(var(--pixel-size)*40);
+    height: calc(var(--pixel-size)*35);
+    background: url("/assets/objects/bush2.png") no-repeat;
+    background-size: contain;
+}
+
+.fence {
+    width: calc(var(--pixel-size)*45);
+    height: calc(var(--pixel-size)*45);
+    background: url("/assets/objects/fence.png") no-repeat;
+    background-size: contain;
+}
+
+.fence2 {
+    width: calc(var(--pixel-size)*45);
+    height: calc(var(--pixel-size)*45);
+    background: url("/assets/objects/fence.png") no-repeat;
+    background-size: contain;
+}
+
+.fence5 {
+    width: calc(var(--pixel-size)*55);
+    height: calc(var(--pixel-size)*55);
+    background: url("/assets/objects/fence2.png") no-repeat;
+    background-size: contain;
+}
+
+.fence6 {
+    width: calc(var(--pixel-size)*55);
+    height: calc(var(--pixel-size)*55);
+    background: url("/assets/objects/fence2.png") no-repeat;
+    background-size: contain;
+}
+
+.cave {
+    width: calc(var(--pixel-size)*40);
+    height: calc(var(--pixel-size)*40);
+    background: url("/assets/objects/cave_entrance.png") no-repeat;
+    background-size: contain;
+}
+
+.tent_1 {
+    width: calc(var(--pixel-size)*40);
+    height: calc(var(--pixel-size)*40);
+    background: url("/assets/objects/tent1.png") no-repeat;
+    background-size: contain;
+}
+
+.house2 {
+    width: calc(var(--pixel-size)*80);
+    height: calc(var(--pixel-size)*80);
+    background: url("/assets/objects/house2.png") no-repeat;
+    background-size: contain;
+}
+.house3 {
+    width: calc(var(--pixel-size)*80);
+    height: calc(var(--pixel-size)*80);
+    background: url("/assets/objects/house3.png") no-repeat;
+    background-size: contain;
+}
+
+/* ── HUD ── */
+.hidden {
+    display: none !important;
+}
+
+#hud {
+    position: fixed;
+    top: 24px;
+    right: 28px;
+    display: flex;
+    gap: 12px;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.hud_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.55);
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    margin: 25px;
+    width: 7vw;
+    padding: 6px 14px 6px 10px;
+    font-family: "consolas", monospace;
+    font-size: 14px;
+    color: #fff;
+    backdrop-filter: blur(4px);
+}
+
+.hud_key_icon {
+    --key-size: 28px;
+    width: var(--key-size);
+    height: var(--key-size);
+    overflow: hidden;
+    image-rendering: pixelated;
+    position: relative;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 6px #ffc400);
+}
+
+.hud_key_icon::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(var(--key-size) * 24);
+    height: var(--key-size);
+    background: url("/assets/objects/key_32x32_24f.png") no-repeat left top;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    animation: keyAnim 1.0s steps(24) infinite;
+}
+
+@keyframes hudKeyPulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.35);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.hud_item.pickup-flash {
+    animation: hudKeyPulse 0.3s ease 2;
+}
+
+/* ── Cave prompt ── */
+#cave_prompt {
+    position: fixed;
+    bottom: 72px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-family: "consolas", monospace;
+    font-size: 15px;
+    color: #fff;
+    z-index: 20;
+    pointer-events: none;
+    animation: promptBob 1.2s ease-in-out infinite;
+}
+
+#cave_prompt kbd {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+@keyframes promptBob {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-4px);
+    }
+}

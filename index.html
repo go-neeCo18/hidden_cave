@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIDDEN CAVE - Official Landing Page</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <div class="game-bg"></div>
+    <div class="vignette"></div>
+
+    <div class="toast-container" id="game-toast">
+        <div class="toast-title" id="toast-header">SYSTEM ALERT</div>
+        <p id="toast-message">Message text goes here.</p>
+    </div>
+
+    <div class="main-container">
+        <div class="logo-area">
+            <img class="game-title" src="assets/ui/hidden_cave.png" alt="HIDDEN CAVE">
+            <p class="game-subtitle">Find the Secrets Hidden Within</p>
+        </div>
+
+        <div class="menu-actions">
+            <button class="btn-pixel btn-teal-glow" id="btn-login">LOG IN</button>
+            <button class="btn-pixel btn-crimson-glow" id="btn-register">REGISTER</button>
+        </div>
+
+        <div class="footer-credits">
+            <p>© 2026 HIDDEN CAVE. ALL RIGHTS RESERVED.</p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-box">
+            <button class="modal-close" id="modal-close">✕</button>
+            <h2 class="modal-title" id="modal-title">ACCOUNT LOGIN</h2>
+
+            <form id="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Character Email Address</label>
+                    <input type="email" class="form-input" id="input-user" required
+                        placeholder="Enter adventurer email...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Secret Cipher Key</label>
+                    <input type="password" class="form-input" id="input-pass" required placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="btn-pixel" id="btn-submit-form" style="margin-top: 10px;">
+                    CONFIRM
+                </button>
+
+                <p class="form-toggle-prompt" id="form-toggle-text"></p>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="index.js"></script>
+        
+    </script>
+</body>
+
+</html>

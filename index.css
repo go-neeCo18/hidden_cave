@@ -1,0 +1,427 @@
+/* ─────────────────────────────────────────────
+            GAME-MATCHED PALETTE VARIABLE ENGINE
+           ───────────────────────────────────────────── */
+:root {
+    --pixel-size: 4px;
+    --slime-crimson: #bd5c3c;
+    --slime-crimson-bright: #c14e2b;
+    --slime-crimson-dark: #823c24;
+
+    --glow-teal: #69ce6d;
+    --glow-teal-bright: #4ab445;
+    --glow-teal-dark: #2e7b6c;
+
+    --shadow-blue: #182a32;
+    --cavern-dark: #0b0d10;
+    --panel-slate: #14181f;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+body,
+html {
+    height: 100%;
+    overflow: hidden;
+    font-family: "Consolas", "Courier New", monospace;
+    background-color: var(--cavern-dark);
+    color: #ffffff;
+}
+
+/* Fullscreen Game Background Asset */
+.game-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('input_file_3.png');
+    background-size: cover;
+    background-position: center;
+    image-rendering: pixelated;
+    z-index: 1;
+    transform: scale(1.02);
+    animation: slowPan 25s infinite alternate ease-in-out;
+}
+
+@keyframes slowPan {
+    0% {
+        transform: scale(1.02) translate(0px, 0px);
+    }
+
+    100% {
+        transform: scale(1.06) translate(-8px, -4px);
+    }
+}
+
+/* Vignette Dark Masking Cover Layer */
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 50% 50%,
+            transparent 20%,
+            rgba(24, 42, 50, 0.4) 50%,
+            rgba(11, 13, 16, 0.98) 95%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────
+            MAIN CONTAINER HUD LAYOUT
+           ───────────────────────────────────────────── */
+.main-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 60px 20px;
+    z-index: 10;
+}
+
+.logo-area {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.game-title {
+    max-width: 450px;
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+    animation: floatLogo 3s infinite ease-in-out;
+    display: block;
+}
+
+.game-subtitle {
+    font-size: 13px;
+    color: var(--slime-crimson);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-top: 20px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(222, 70, 19, 0.6);
+}
+
+@keyframes floatLogo {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotate(0.5deg);
+    }
+}
+
+/* Action Controls Buttons Wrapper */
+.menu-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 340px;
+    margin-bottom: 20px;
+}
+
+/* ─────────────────────────────────────────────
+            AUTHENTIC PIXELATED BUTTON ENGINE
+           ───────────────────────────────────────────── */
+.btn-pixel {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffffff;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+
+    /* Structural 8-bit stepped borders via double box-shadows */
+    background: #252e3d;
+    border: none;
+    box-shadow:
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000,
+        inset calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 0 #11161d,
+        inset var(--pixel-size) var(--pixel-size) 0 0 #3a485c;
+}
+
+.btn-pixel:active {
+    padding-top: 16px;
+    padding-bottom: 12px;
+    box-shadow:
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000,
+        inset var(--pixel-size) var(--pixel-size) 0 0 #11161d;
+}
+
+/* Teal Mode Button Variants */
+.btn-teal-glow {
+    background: var(--glow-teal-dark);
+    box-shadow:
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000,
+        inset calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 0 #004d3d,
+        inset var(--pixel-size) var(--pixel-size) 0 0 var(--glow-teal-bright),
+        0 0 15px rgba(0, 255, 204, 0.4);
+}
+
+.btn-teal-glow:hover {
+    background: #00cc52;
+    /* Game style color step up */
+    background: var(--glow-teal);
+    color: #0b0d10;
+}
+
+/* Crimson Mode Button Variants */
+.btn-crimson-glow {
+    background: var(--slime-crimson);
+    box-shadow:
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000,
+        inset calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 0 var(--slime-crimson-dark),
+        inset var(--pixel-size) var(--pixel-size) 0 0 var(--slime-crimson-bright),
+        0 0 15px rgba(222, 70, 19, 0.4);
+}
+
+.btn-crimson-glow:hover {
+    background: #f5531d;
+}
+
+/* Footer Attribution Signature Block */
+.footer-credits {
+    font-size: 11px;
+    color: #526075;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+/* ─────────────────────────────────────────────
+            DYNAMIC MODAL SYSTEM LAYOUT
+           ───────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(11, 13, 16, 0.92);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background-color: var(--panel-slate);
+    width: 90%;
+    max-width: 420px;
+    padding: 35px;
+    position: relative;
+
+    /* Core Pixelated Panel Border Strategy */
+    box-shadow:
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* STATE INTERCHANGE ARCHITECTURE */
+.modal-overlay.mode-login .modal-box {
+    border: var(--pixel-size) solid var(--glow-teal);
+    box-shadow: 0 0 40px rgba(0, 255, 204, 0.15),
+        0 calc(var(--pixel-size) * -1) 0 0 0 Black, 0 var(--pixel-size) 0 0 #000, calc(var(--pixel-size) * -1) 0 0 0 #000, var(--pixel-size) 0 0 0 #000;
+}
+
+.modal-overlay.mode-register .modal-box {
+    border: var(--pixel-size) solid var(--slime-crimson);
+    box-shadow: 0 0 40px rgba(222, 70, 19, 0.15),
+        0 calc(var(--pixel-size) * -1) 0 0 #000, 0 var(--pixel-size) 0 0 #000, calc(var(--pixel-size) * -1) 0 0 0 #000, var(--pixel-size) 0 0 0 #000;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #526075;
+    cursor: pointer;
+    font-size: 18px;
+    background: none;
+    border: none;
+    font-family: inherit;
+}
+
+.modal-overlay.mode-login .modal-close:hover {
+    color: var(--glow-teal);
+}
+
+.modal-overlay.mode-register .modal-close:hover {
+    color: var(--slime-crimson);
+}
+
+.modal-title {
+    font-size: 22px;
+    color: #ffffff;
+    margin-bottom: 25px;
+    text-align: center;
+    letter-spacing: 2px;
+    border-bottom: calc(var(--pixel-size) * 0.5) dashed #2f3846;
+    padding-bottom: 14px;
+}
+
+.modal-overlay.mode-login .modal-title {
+    color: var(--glow-teal);
+}
+
+.modal-overlay.mode-register .modal-title {
+    color: var(--slime-crimson);
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-label {
+    display: block;
+    font-size: 11px;
+    margin-bottom: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.modal-overlay.mode-login .form-label {
+    color: var(--glow-teal-bright);
+}
+
+.modal-overlay.mode-register .form-label {
+    color: var(--slime-crimson-bright);
+}
+
+.form-input {
+    width: 100%;
+    background-color: #0d1013;
+    border: calc(var(--pixel-size) * 0.5) solid #2f3846;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 12px;
+    outline: none;
+}
+
+.modal-overlay.mode-login .form-input:focus {
+    border-color: var(--glow-teal);
+    background-color: #11151a;
+}
+
+.modal-overlay.mode-register .form-input:focus {
+    border-color: var(--slime-crimson);
+    background-color: #161211;
+}
+
+.form-toggle-prompt {
+    font-size: 12px;
+    color: #6b7c96;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.form-toggle-prompt span {
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.modal-overlay.mode-login .form-toggle-prompt span:hover {
+    color: var(--glow-teal);
+}
+
+.modal-overlay.mode-register .form-toggle-prompt span:hover {
+    color: var(--slime-crimson);
+}
+
+/* ─────────────────────────────────────────────
+            CUSTOM IN-GAME NOTIFICATION TOAST PIPELINE
+           ───────────────────────────────────────────── */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: -400px;
+    width: 340px;
+    z-index: 1000;
+    background-color: var(--panel-slate);
+    padding: 20px;
+    font-size: 13px;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow:
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000;
+}
+
+.toast-container.active {
+    right: 20px;
+}
+
+.toast-container.toast-success {
+    border: var(--pixel-size) solid var(--glow-teal);
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.2), 0 calc(var(--pixel-size) * -1) 0 0 #000, 0 var(--pixel-size) 0 0 #000, calc(var(--pixel-size) * -1) 0 0 0 #000, var(--pixel-size) 0 0 0 #000;
+}
+
+.toast-container.toast-error {
+    border: var(--pixel-size) solid var(--slime-crimson);
+    box-shadow: 0 0 20px rgba(222, 70, 19, 0.3), 0 calc(var(--pixel-size) * -1) 0 0 #000, 0 var(--pixel-size) 0 0 #000, calc(var(--pixel-size) * -1) 0 0 0 #000, var(--pixel-size) 0 0 0 #000;
+}
+
+.toast-title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.toast-success .toast-title {
+    color: var(--glow-teal);
+}
+
+.toast-error .toast-title {
+    color: var(--slime-crimson);
+}

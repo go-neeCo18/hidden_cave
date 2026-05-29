@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidden Cave</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    
+    <div class="overlay">
+        <div class="footer">
+            <h2>Created by Niko Go</h2>
+            <p>In fullfilment of the Final Project for ITCC 13.1</p>
+        </div>
+
+        <div class="health-bar" id="health-bar"></div>
+    </div>
+
+    <div class="pop_up" id="pop_up">
+        <div class="pop_up_content" id="pop_up_content">
+            <p id = pop_up_text>Some text in the Modal..</p>
+            <p id = pop_up_text2>Some text in the Modal..</p>
+            <span class="close">CLOSE</span>
+        </div>
+    </div>
+
+    <!-- Key pickup & cave HUD -->
+    <div id="hud">
+        <div id="hud_key" class="hud_item hidden">
+            <div class="hud_key_icon"></div>
+            <span>Cave Key</span>
+        </div>
+    </div>
+
+    <!-- Cave interaction prompt -->
+    <div id="cave_prompt" class="hidden">Press <kbd>E</kbd> to enter cave</div>
+
+    <div class="camera">
+        <div class="ocean"></div>
+
+        <div class="map pixel-art">
+
+            <!-- ══════════════════════════════════════════════
+                 HOUSE
+                 ax=700 ay=100  → centre ≈ (x=214,y=57) game units
+            ══════════════════════════════════════════════ -->
+            <div class="asset house" data-x="140" data-y="20" data-h="74" style="--ax:700px;  --ay:100px;"></div>
+
+            <!-- ══════════════════════════════════════════════
+                 FENCES (original)
+            ══════════════════════════════════════════════ -->
+            <div class="asset fence" data-x="120" data-y="100" data-h="4" style="--ax:600px;  --ay:500px;"></div>
+            <div class="asset fence2" data-x="120" data-y="100" data-h="4" style="--ax:930px;  --ay:500px;"></div>
+            <div class="asset fence5" data-x="116" data-y="44" data-h="25" style="--ax:580px;  --ay:220px;"></div>
+            <div class="asset fence6" data-x="116" data-y="44" data-h="25" style="--ax:1100px; --ay:220px;"></div>
+
+            <!-- ══════════════════════════════════════════════
+                 TREES — scattered across map
+                 data-y + data-h drives zIndex (feet of sprite)
+            ══════════════════════════════════════════════ -->
+            <!-- top-left cluster -->
+            <div class="asset tree1" data-x="10" data-y="30" data-h="60" style="--ax:50px;   --ay:50px;"></div>
+            <div class="asset tree3" data-x="45" data-y="8" data-h="60" style="--ax:225px;  --ay:40px;"></div>
+            <!-- top-right cluster -->
+            <div class="asset tree2" data-x="480" data-y="12" data-h="50" style="--ax:2400px; --ay:60px;"></div>
+            <div class="asset tree4" data-x="515" data-y="8" data-h="55" style="--ax:2575px; --ay:40px;"></div>
+            <div class="asset tree5" data-x="550" data-y="15" data-h="55" style="--ax:2750px; --ay:75px;"></div>
+            <!-- right-mid grove -->
+            <div class="asset tree1" data-x="560" data-y="120" data-h="60" style="--ax:2800px; --ay:600px;"></div>
+            <div class="asset tree3" data-x="540" data-y="155" data-h="60" style="--ax:2700px; --ay:775px;"></div>
+            <div class="asset tree4" data-x="570" data-y="190" data-h="60" style="--ax:2850px; --ay:950px;"></div>
+            <!-- left-mid trees -->
+            <div class="asset tree2" data-x="15" data-y="150" data-h="60" style="--ax:75px;   --ay:750px;"></div>
+            <div class="asset tree5" data-x="18" data-y="195" data-h="55" style="--ax:90px;   --ay:975px;"></div>
+            <!-- bottom-left corner -->
+            <div class="asset tree1" data-x="20" data-y="330" data-h="60" style="--ax:100px;  --ay:1650px;"></div>
+            <div class="asset tree3" data-x="55" data-y="345" data-h="60" style="--ax:275px;  --ay:1725px;"></div>
+            <!-- bottom-right corner -->
+            <div class="asset tree4" data-x="530" data-y="330" data-h="60" style="--ax:2650px; --ay:1650px;"></div>
+            <div class="asset tree2" data-x="555" data-y="350" data-h="60" style="--ax:2775px; --ay:1750px;"></div>
+            <!-- bottom-center scatter -->
+            <div class="asset tree5" data-x="280" data-y="360" data-h="55" style="--ax:1400px; --ay:1800px;"></div>
+            <div class="asset tree1" data-x="320" data-y="370" data-h="60" style="--ax:1600px; --ay:1850px;"></div>
+            <!-- lone tree centre-left -->
+            <div class="asset tree3" data-x="90" data-y="260" data-h="60" style="--ax:450px;  --ay:1300px;"></div>
+            <!-- pond-side tree -->
+            <div class="asset tree4" data-x="195" data-y="130" data-h="60" style="--ax:975px;  --ay:650px;"></div>
+
+            <!-- ══════════════════════════════════════════════
+                 ROCKS
+            ══════════════════════════════════════════════ -->
+            <div class="asset rock1" data-x="340" data-y="260" data-h="20" style="--ax:1700px; --ay:1300px;"></div>
+            <div class="asset rock2" data-x="420" data-y="215" data-h="20" style="--ax:2100px; --ay:1075px;"></div>
+            <div class="asset rock3" data-x="60" data-y="290" data-h="19" style="--ax:300px;  --ay:1450px;"></div>
+            <div class="asset rock4" data-x="460" data-y="300" data-h="18" style="--ax:2300px; --ay:1500px;"></div>
+            <!-- rock near pond edge -->
+            <div class="asset rock1" data-x="248" data-y="180" data-h="20" style="--ax:1240px; --ay:900px;"></div>
+            <!-- top-right accent -->
+            <div class="asset rock3" data-x="455" data-y="60" data-h="19" style="--ax:2275px; --ay:300px;"></div>
+            <!-- scatter mid-map -->
+            <div class="asset rock2" data-x="175" data-y="310" data-h="20" style="--ax:875px;  --ay:1550px;"></div>
+            <div class="asset rock4" data-x="370" data-y="90" data-h="18" style="--ax:1850px; --ay:450px;"></div>
+
+            <!-- ══════════════════════════════════════════════
+                 LOGS
+            ══════════════════════════════════════════════ -->
+            <div class="asset log1" data-x="100" data-y="320" data-h="18" style="--ax:500px;  --ay:1600px;"></div>
+            <div class="asset log2" data-x="395" data-y="160" data-h="18" style="--ax:1975px; --ay:800px;"></div>
+            <!-- small log cluster near bottom-left trees -->
+            <div class="asset log1" data-x="38" data-y="355" data-h="18" style="--ax:190px;  --ay:1775px;"></div>
+
+            <!-- ══════════════════════════════════════════════
+                 MUSHROOM
+            ══════════════════════════════════════════════ -->
+            <div class="asset mushroom1" data-x="115" data-y="325" data-h="18" style="--ax:575px; --ay:1625px;"></div>
+            <div class="asset mushroom1" data-x="440" data-y="270" data-h="18" style="--ax:2200px;--ay:1350px;"></div>
+
+            <!-- ══════════════════════════════════════════════
+                 SCARECROW
+            ══════════════════════════════════════════════ -->
+            <div class="asset scarecrow" data-x="230" data-y="270" data-h="28" style="--ax:1150px;--ay:1350px;"></div>
+            <div class="asset scarecrow" data-x="310" data-y="240" data-h="28" style="--ax:1550px;--ay:1200px;"></div>
+
+            <!-- ══════════════════════════════════════════════
+                 BUSHES
+            ══════════════════════════════════════════════ -->
+            <!-- left side -->
+            <div class="asset bush bush1" data-bush="true" data-x="32" data-y="230" data-h="20"
+                style="--ax:160px;  --ay:1150px;"></div>
+            <div class="asset bush bush2" data-bush="true" data-x="55" data-y="240" data-h="18"
+                style="--ax:275px;  --ay:1200px;"></div>
+            <div class="asset bush bush1" data-bush="true" data-x="30" data-y="120" data-h="20"
+                style="--ax:150px;  --ay:600px;"></div>
+            <!-- right side -->
+            <div class="asset bush bush2" data-bush="true" data-x="505" data-y="250" data-h="18"
+                style="--ax:2525px; --ay:1250px;"></div>
+            <div class="asset bush bush1" data-bush="true" data-x="490" data-y="100" data-h="20"
+                style="--ax:2450px; --ay:500px;"></div>
+            <!-- centre scatter -->
+            <div class="asset bush bush2" data-bush="true" data-x="260" data-y="200" data-h="18"
+                style="--ax:1300px; --ay:1000px;"></div>
+            <div class="asset bush bush1" data-bush="true" data-x="350" data-y="310" data-h="20"
+                style="--ax:1750px; --ay:1550px;"></div>
+            <div class="asset bush bush2" data-bush="true" data-x="155" data-y="380" data-h="18"
+                style="--ax:775px;  --ay:1900px;"></div>
+            <div class="asset bush bush1" data-bush="true" data-x="430" data-y="380" data-h="20"
+                style="--ax:2150px; --ay:1900px;"></div>
+            <!-- pond-side bushes -->
+            <div class="asset bush bush2" data-bush="true" data-x="130" data-y="150" data-h="18"
+                style="--ax:650px;  --ay:750px;"></div>
+            <div class="asset bush bush1" data-bush="true" data-x="265" data-y="165" data-h="20"
+                style="--ax:1325px; --ay:825px;"></div>
+            
+            <!-- tent-->
+            <div class="asset tent_1" data-x="265" data-y="165" data-h="30" style="--ax:1665px; --ay:825px;"></div>
+
+            <!-- house-->
+            <div class="asset house2" data-x="265" data-y="135" data-h="135" style="--ax:665px; --ay:1025px;"></div>
+            <div class="asset house3" data-x="265" data-y="120" data-h="25" style="--ax:2065px; --ay:425px;"></div>
+
+            <!-- ══════════════════════════════════════════════
+                 CAVE ENTRANCE
+            ══════════════════════════════════════════════ -->
+            <div class="asset cave" data-x="455" data-y="20" data-h="40" style="--ax:2375px; --ay:120px;"></div>
+
+
+            <!-- ══════════════════════════════════════════════
+                 FLOATING KEY
+            ══════════════════════════════════════════════ -->
+            <div class="key_container" id="key_container">
+                <div class="asset floating_key" style="--ax:245px; --ay:1250px;"></div>
+            </div>
+
+            <!-- ══════════════════════════════════════════════
+                 CHARACTER
+            ══════════════════════════════════════════════ -->
+            <div class="character" facing="down" walking="false" style="z-index:1;">
+                <div class="character_spritesheet_idle pixel-art"></div>
+                <div class="character_spritesheet_run  pixel-art"></div>
+            </div>
+
+        </div><!-- end .map -->
+
+        <div class="pond"></div>
+    </div><!-- end .camera -->
+
+    <script src="script.js"></script>
+</body>
+
+</html>
