@@ -12,10 +12,13 @@
 
     <div class="game-bg"></div>
     <div class="vignette"></div>
+    <div class="scanlines"></div>
+    <canvas id="pixel-canvas"></canvas>
 
     <div class="toast-container" id="game-toast">
         <div class="toast-title" id="toast-header">SYSTEM ALERT</div>
         <p id="toast-message">Message text goes here.</p>
+        <div class="toast-progress"></div>
     </div>
 
     <div class="main-container">
@@ -25,8 +28,8 @@
         </div>
 
         <div class="menu-actions">
-            <button class="btn-pixel btn-teal-glow" id="btn-login">LOG IN</button>
-            <button class="btn-pixel btn-crimson-glow" id="btn-register">REGISTER</button>
+            <button class="btn-pixel btn-teal-glow" id="btn-login">▶ LOG IN</button>
+            <button class="btn-pixel btn-crimson-glow" id="btn-register">▶ REGISTER</button>
         </div>
 
         <div class="footer-credits">
@@ -36,19 +39,30 @@
 
     <div class="modal-overlay" id="auth-modal">
         <div class="modal-box">
+            <div class="modal-header-bar"></div>
             <button class="modal-close" id="modal-close">✕</button>
             <h2 class="modal-title" id="modal-title">ACCOUNT LOGIN</h2>
 
             <form id="auth-form">
                 <div class="form-group">
-                    <label class="form-label">Character Email Address</label>
-                    <input type="email" class="form-input" id="input-user" required
-                        placeholder="Enter adventurer email...">
+                    <label class="form-label" for="input-user">Character Email Address</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉</span>
+                        <input type="email" class="form-input" id="input-user" required
+                            placeholder="Enter adventurer email..." autocomplete="email">
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Secret Cipher Key</label>
-                    <input type="password" class="form-input" id="input-pass" required placeholder="••••••••">
+                    <label class="form-label" for="input-pass">Secret Cipher Key</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔑</span>
+                        <input type="password" class="form-input" id="input-pass" required placeholder="••••••••"
+                            autocomplete="current-password">
+                    </div>
+                    <div class="strength-bar-wrap">
+                        <div class="strength-bar" id="strength-bar"></div>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-pixel" id="btn-submit-form" style="margin-top: 10px;">
@@ -61,8 +75,6 @@
     </div>
 
     <script type="module" src="index.js"></script>
-        
-    </script>
 </body>
 
 </html>

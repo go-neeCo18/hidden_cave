@@ -9,7 +9,89 @@
 </head>
 
 <body>
-    
+
+    <!-- ══════════════════════════════════════════════
+    TUTORIAL MODAL
+    ══════════════════════════════════════════════ -->
+    <div class="tutorial_overlay" id="tutorial_overlay">
+        <div class="tutorial_panel" id="tutorial_panel">
+
+            <div class="tutorial_header">
+                <div class="tutorial_pixel_deco"></div>
+                <h1 class="tutorial_title">HIDDEN CAVE</h1>
+                <div class="tutorial_pixel_deco"></div>
+            </div>
+
+            <p class="tutorial_subtitle">— An Adventure Awaits —</p>
+
+            <div class="tutorial_steps">
+
+                <div class="tutorial_step">
+                    <div class="tutorial_step_body">
+                        <span class="tutorial_step_label">OBJECTIVE</span>
+                        <span class="tutorial_step_text">Find the key, locate the cave entrance, and complete what lies
+                            within.</span>
+                    </div>
+                </div>
+
+                <div class="tutorial_divider"></div>
+
+                <div class="tutorial_step">
+                    <div class="tutorial_step_body">
+                        <span class="tutorial_step_label">MOVE</span>
+                        <div class="tutorial_keys_row">
+                            <span class="tutorial_step_text">Arrow keys or</span>
+                            <div class="tutorial_keyset">
+                                <kbd>W</kbd>
+                                <div class="tutorial_wasd_row"><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tutorial_step">
+                    <div class="tutorial_step_body">
+                        <span class="tutorial_step_label">SPRINT</span>
+                        <div class="tutorial_keys_row">
+                            <span class="tutorial_step_text">Hold</span>
+                            <kbd class="tutorial_kbd_wide">Shift</kbd>
+                            <span class="tutorial_step_text">while moving</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tutorial_step">
+                    <div class="tutorial_step_body">
+                        <span class="tutorial_step_label">FIND THE KEY</span>
+                        <span class="tutorial_step_text">It's hidden somewhere on the map — check behind bushes!</span>
+                    </div>
+                </div>
+
+                <div class="tutorial_step">
+                    <div class="tutorial_step_body">
+                        <span class="tutorial_step_label">ENTER CAVE</span>
+                        <div class="tutorial_keys_row">
+                            <span class="tutorial_step_text">Approach the cave entrance and press</span>
+                            <kbd>E</kbd>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="tutorial_start_btn" id="tutorial_start_btn">
+                <span>▶ &nbsp; START ADVENTURE</span>
+            </button>
+
+            <p class="tutorial_hint">Press <kbd class="tutorial_kbd_inline">/</kbd> anytime to toggle debug view</p>
+
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+    OVERLAY & HUD
+    ══════════════════════════════════════════════ -->
+
     <div class="overlay">
         <div class="footer">
             <h2>Created by Niko Go</h2>
@@ -21,8 +103,8 @@
 
     <div class="pop_up" id="pop_up">
         <div class="pop_up_content" id="pop_up_content">
-            <p id = pop_up_text>Some text in the Modal..</p>
-            <p id = pop_up_text2>Some text in the Modal..</p>
+            <p id=pop_up_text>Some text in the Modal..</p>
+            <p id=pop_up_text2>Some text in the Modal..</p>
             <span class="close">CLOSE</span>
         </div>
     </div>
@@ -43,24 +125,17 @@
 
         <div class="map pixel-art">
 
-            <!-- ══════════════════════════════════════════════
-                 HOUSE
-                 ax=700 ay=100  → centre ≈ (x=214,y=57) game units
-            ══════════════════════════════════════════════ -->
+            <!--HOUSE-->
             <div class="asset house" data-x="140" data-y="20" data-h="74" style="--ax:700px;  --ay:100px;"></div>
 
-            <!-- ══════════════════════════════════════════════
-                 FENCES (original)
-            ══════════════════════════════════════════════ -->
+            <!--FENCES-->
             <div class="asset fence" data-x="120" data-y="100" data-h="4" style="--ax:600px;  --ay:500px;"></div>
             <div class="asset fence2" data-x="120" data-y="100" data-h="4" style="--ax:930px;  --ay:500px;"></div>
             <div class="asset fence5" data-x="116" data-y="44" data-h="25" style="--ax:580px;  --ay:220px;"></div>
             <div class="asset fence6" data-x="116" data-y="44" data-h="25" style="--ax:1100px; --ay:220px;"></div>
 
-            <!-- ══════════════════════════════════════════════
-                 TREES — scattered across map
-                 data-y + data-h drives zIndex (feet of sprite)
-            ══════════════════════════════════════════════ -->
+            <!--TREES-->
+
             <!-- top-left cluster -->
             <div class="asset tree1" data-x="10" data-y="30" data-h="60" style="--ax:50px;   --ay:50px;"></div>
             <div class="asset tree3" data-x="45" data-y="8" data-h="60" style="--ax:225px;  --ay:40px;"></div>
@@ -89,9 +164,7 @@
             <!-- pond-side tree -->
             <div class="asset tree4" data-x="195" data-y="130" data-h="60" style="--ax:975px;  --ay:650px;"></div>
 
-            <!-- ══════════════════════════════════════════════
-                 ROCKS
-            ══════════════════════════════════════════════ -->
+            <!--ROCKS-->
             <div class="asset rock1" data-x="340" data-y="260" data-h="20" style="--ax:1700px; --ay:1300px;"></div>
             <div class="asset rock2" data-x="420" data-y="215" data-h="20" style="--ax:2100px; --ay:1075px;"></div>
             <div class="asset rock3" data-x="60" data-y="290" data-h="19" style="--ax:300px;  --ay:1450px;"></div>
@@ -104,29 +177,21 @@
             <div class="asset rock2" data-x="175" data-y="310" data-h="20" style="--ax:875px;  --ay:1550px;"></div>
             <div class="asset rock4" data-x="370" data-y="90" data-h="18" style="--ax:1850px; --ay:450px;"></div>
 
-            <!-- ══════════════════════════════════════════════
-                 LOGS
-            ══════════════════════════════════════════════ -->
+            <!--LOGS-->
             <div class="asset log1" data-x="100" data-y="320" data-h="18" style="--ax:500px;  --ay:1600px;"></div>
             <div class="asset log2" data-x="395" data-y="160" data-h="18" style="--ax:1975px; --ay:800px;"></div>
             <!-- small log cluster near bottom-left trees -->
             <div class="asset log1" data-x="38" data-y="355" data-h="18" style="--ax:190px;  --ay:1775px;"></div>
 
-            <!-- ══════════════════════════════════════════════
-                 MUSHROOM
-            ══════════════════════════════════════════════ -->
+            <!--MUSHROOMS-->
             <div class="asset mushroom1" data-x="115" data-y="325" data-h="18" style="--ax:575px; --ay:1625px;"></div>
             <div class="asset mushroom1" data-x="440" data-y="270" data-h="18" style="--ax:2200px;--ay:1350px;"></div>
 
-            <!-- ══════════════════════════════════════════════
-                 SCARECROW
-            ══════════════════════════════════════════════ -->
+            <!--SCARECROWS-->
             <div class="asset scarecrow" data-x="230" data-y="270" data-h="28" style="--ax:1150px;--ay:1350px;"></div>
             <div class="asset scarecrow" data-x="310" data-y="240" data-h="28" style="--ax:1550px;--ay:1200px;"></div>
 
-            <!-- ══════════════════════════════════════════════
-                 BUSHES
-            ══════════════════════════════════════════════ -->
+            <!--BUSHES-->
             <!-- left side -->
             <div class="asset bush bush1" data-bush="true" data-x="32" data-y="230" data-h="20"
                 style="--ax:160px;  --ay:1150px;"></div>
@@ -153,7 +218,7 @@
                 style="--ax:650px;  --ay:750px;"></div>
             <div class="asset bush bush1" data-bush="true" data-x="265" data-y="165" data-h="20"
                 style="--ax:1325px; --ay:825px;"></div>
-            
+
             <!-- tent-->
             <div class="asset tent_1" data-x="265" data-y="165" data-h="30" style="--ax:1665px; --ay:825px;"></div>
 
@@ -161,21 +226,17 @@
             <div class="asset house2" data-x="265" data-y="135" data-h="135" style="--ax:665px; --ay:1025px;"></div>
             <div class="asset house3" data-x="265" data-y="120" data-h="25" style="--ax:2065px; --ay:425px;"></div>
 
-            <!-- ══════════════════════════════════════════════
-                 CAVE ENTRANCE
-            ══════════════════════════════════════════════ -->
+            <!--CAVE-->
             <div class="asset cave" data-x="455" data-y="20" data-h="40" style="--ax:2375px; --ay:120px;"></div>
 
 
-            <!-- ══════════════════════════════════════════════
-                 FLOATING KEY
-            ══════════════════════════════════════════════ -->
+            <!--KEY-->
             <div class="key_container" id="key_container">
                 <div class="asset floating_key" style="--ax:245px; --ay:1250px;"></div>
             </div>
 
-            <!-- ══════════════════════════════════════════════
-                 CHARACTER
+            <!-- ════════════════════════════════════════════
+            CHARACTER
             ══════════════════════════════════════════════ -->
             <div class="character" facing="down" walking="false" style="z-index:1;">
                 <div class="character_spritesheet_idle pixel-art"></div>

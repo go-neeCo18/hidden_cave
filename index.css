@@ -6,14 +6,13 @@
     --slime-crimson: #bd5c3c;
     --slime-crimson-bright: #c14e2b;
     --slime-crimson-dark: #823c24;
-
     --glow-teal: #69ce6d;
     --glow-teal-bright: #4ab445;
     --glow-teal-dark: #2e7b6c;
-
     --shadow-blue: #182a32;
     --cavern-dark: #0b0d10;
     --panel-slate: #14181f;
+    --panel-slate-light: #1a2029;
 }
 
 * {
@@ -32,7 +31,7 @@ html {
     color: #ffffff;
 }
 
-/* Fullscreen Game Background Asset */
+/* ─── BACKGROUND ─── */
 .game-bg {
     position: fixed;
     top: 0;
@@ -58,7 +57,6 @@ html {
     }
 }
 
-/* Vignette Dark Masking Cover Layer */
 .vignette {
     position: fixed;
     top: 0;
@@ -73,9 +71,45 @@ html {
     pointer-events: none;
 }
 
-/* ─────────────────────────────────────────────
-            MAIN CONTAINER HUD LAYOUT
-           ───────────────────────────────────────────── */
+/* Scanline overlay for authentic CRT pixel-art feel */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: repeating-linear-gradient(to bottom,
+            transparent 0px,
+            transparent 3px,
+            rgba(0, 0, 0, 0.08) 3px,
+            rgba(0, 0, 0, 0.08) 4px);
+    z-index: 3;
+    pointer-events: none;
+    animation: scanlineShift 8s linear infinite;
+}
+
+@keyframes scanlineShift {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 0 80px;
+    }
+}
+
+/* Pixel particle canvas */
+#pixel-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    pointer-events: none;
+}
+
+/* ─── MAIN LAYOUT ─── */
 .main-container {
     position: relative;
     width: 100%;
@@ -88,6 +122,7 @@ html {
     z-index: 10;
 }
 
+/* ─── LOGO ─── */
 .logo-area {
     text-align: center;
     margin-top: 20px;
@@ -99,8 +134,9 @@ html {
     width: 80%;
     height: auto;
     margin: 0 auto;
-    animation: floatLogo 3s infinite ease-in-out;
     display: block;
+    animation: floatLogo 3s infinite ease-in-out;
+    filter: drop-shadow(0 0 18px rgba(105, 206, 109, 0.35));
 }
 
 .game-subtitle {
@@ -111,6 +147,19 @@ html {
     margin-top: 20px;
     font-weight: bold;
     text-shadow: 0 0 10px rgba(222, 70, 19, 0.6);
+    animation: subtitlePulse 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes subtitlePulse {
+    0% {
+        opacity: 0.7;
+        letter-spacing: 5px;
+    }
+
+    100% {
+        opacity: 1;
+        letter-spacing: 6px;
+    }
 }
 
 @keyframes floatLogo {
@@ -125,19 +174,17 @@ html {
     }
 }
 
-/* Action Controls Buttons Wrapper */
+/* ─── MENU ACTIONS ─── */
 .menu-actions {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
     width: 100%;
     max-width: 340px;
     margin-bottom: 20px;
 }
 
-/* ─────────────────────────────────────────────
-            AUTHENTIC PIXELATED BUTTON ENGINE
-           ───────────────────────────────────────────── */
+/* ─── PIXEL BUTTONS ─── */
 .btn-pixel {
     position: relative;
     display: inline-block;
@@ -152,10 +199,9 @@ html {
     cursor: pointer;
     outline: none;
     text-align: center;
-
-    /* Structural 8-bit stepped borders via double box-shadows */
     background: #252e3d;
     border: none;
+    transition: transform 0.08s ease, filter 0.15s ease;
     box-shadow:
         0 calc(var(--pixel-size) * -1) 0 0 #000,
         0 var(--pixel-size) 0 0 #000,
@@ -165,9 +211,43 @@ html {
         inset var(--pixel-size) var(--pixel-size) 0 0 #3a485c;
 }
 
+/* Corner pixel decorations on buttons */
+.btn-pixel::before,
+.btn-pixel::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    opacity: 0.35;
+    transition: opacity 0.15s;
+}
+
+.btn-pixel::before {
+    top: -2px;
+    left: -2px;
+}
+
+.btn-pixel::after {
+    bottom: -2px;
+    right: -2px;
+}
+
+.btn-pixel:hover::before,
+.btn-pixel:hover::after {
+    opacity: 0.8;
+}
+
+.btn-pixel:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
 .btn-pixel:active {
+    transform: translateY(2px);
     padding-top: 16px;
     padding-bottom: 12px;
+    filter: brightness(0.9);
     box-shadow:
         0 calc(var(--pixel-size) * -1) 0 0 #000,
         0 var(--pixel-size) 0 0 #000,
@@ -176,7 +256,7 @@ html {
         inset var(--pixel-size) var(--pixel-size) 0 0 #11161d;
 }
 
-/* Teal Mode Button Variants */
+/* Teal button */
 .btn-teal-glow {
     background: var(--glow-teal-dark);
     box-shadow:
@@ -186,17 +266,15 @@ html {
         var(--pixel-size) 0 0 0 #000,
         inset calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 0 #004d3d,
         inset var(--pixel-size) var(--pixel-size) 0 0 var(--glow-teal-bright),
-        0 0 15px rgba(0, 255, 204, 0.4);
+        0 0 18px rgba(74, 180, 69, 0.5);
 }
 
 .btn-teal-glow:hover {
-    background: #00cc52;
-    /* Game style color step up */
     background: var(--glow-teal);
     color: #0b0d10;
 }
 
-/* Crimson Mode Button Variants */
+/* Crimson button */
 .btn-crimson-glow {
     background: var(--slime-crimson);
     box-shadow:
@@ -206,14 +284,14 @@ html {
         var(--pixel-size) 0 0 0 #000,
         inset calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 0 var(--slime-crimson-dark),
         inset var(--pixel-size) var(--pixel-size) 0 0 var(--slime-crimson-bright),
-        0 0 15px rgba(222, 70, 19, 0.4);
+        0 0 18px rgba(193, 78, 43, 0.5);
 }
 
 .btn-crimson-glow:hover {
     background: #f5531d;
 }
 
-/* Footer Attribution Signature Block */
+/* ─── FOOTER ─── */
 .footer-credits {
     font-size: 11px;
     color: #526075;
@@ -221,9 +299,7 @@ html {
     letter-spacing: 2px;
 }
 
-/* ─────────────────────────────────────────────
-            DYNAMIC MODAL SYSTEM LAYOUT
-           ───────────────────────────────────────────── */
+/* ─── MODAL ─── */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -251,8 +327,7 @@ html {
     max-width: 420px;
     padding: 35px;
     position: relative;
-
-    /* Core Pixelated Panel Border Strategy */
+    animation: none;
     box-shadow:
         0 calc(var(--pixel-size) * -1) 0 0 #000,
         0 var(--pixel-size) 0 0 #000,
@@ -261,17 +336,90 @@ html {
     transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* STATE INTERCHANGE ARCHITECTURE */
+/* Pixel corner ornaments on modal box */
+.modal-box::before,
+.modal-box::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.modal-box::before {
+    top: 6px;
+    left: 6px;
+    border-top: 2px solid currentColor;
+    border-left: 2px solid currentColor;
+    opacity: 0.4;
+}
+
+.modal-box::after {
+    bottom: 6px;
+    right: 6px;
+    border-bottom: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    opacity: 0.4;
+}
+
+/* Pop-in animation when modal opens */
+.modal-overlay.active .modal-box {
+    animation: modalPopIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes modalPopIn {
+    0% {
+        transform: scale(0.88) translateY(12px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
 .modal-overlay.mode-login .modal-box {
     border: var(--pixel-size) solid var(--glow-teal);
-    box-shadow: 0 0 40px rgba(0, 255, 204, 0.15),
-        0 calc(var(--pixel-size) * -1) 0 0 0 Black, 0 var(--pixel-size) 0 0 #000, calc(var(--pixel-size) * -1) 0 0 0 #000, var(--pixel-size) 0 0 0 #000;
+    box-shadow: 0 0 40px rgba(74, 180, 69, 0.2),
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000;
 }
 
 .modal-overlay.mode-register .modal-box {
     border: var(--pixel-size) solid var(--slime-crimson);
-    box-shadow: 0 0 40px rgba(222, 70, 19, 0.15),
-        0 calc(var(--pixel-size) * -1) 0 0 #000, 0 var(--pixel-size) 0 0 #000, calc(var(--pixel-size) * -1) 0 0 0 #000, var(--pixel-size) 0 0 0 #000;
+    box-shadow: 0 0 40px rgba(193, 78, 43, 0.2),
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000;
+}
+
+/* Decorative header bar above modal title */
+.modal-header-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(90deg,
+            transparent 0px,
+            transparent 6px,
+            currentColor 6px,
+            currentColor 12px);
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.modal-overlay.mode-login .modal-header-bar {
+    color: var(--glow-teal);
+}
+
+.modal-overlay.mode-register .modal-header-bar {
+    color: var(--slime-crimson);
 }
 
 .modal-close {
@@ -284,6 +432,13 @@ html {
     background: none;
     border: none;
     font-family: inherit;
+    transition: color 0.15s, transform 0.15s;
+    line-height: 1;
+    padding: 4px 6px;
+}
+
+.modal-close:hover {
+    transform: scale(1.2) rotate(15deg);
 }
 
 .modal-overlay.mode-login .modal-close:hover {
@@ -312,12 +467,16 @@ html {
     color: var(--slime-crimson);
 }
 
+/* ─── FORM GROUPS ─── */
 .form-group {
     margin-bottom: 22px;
+    position: relative;
 }
 
 .form-label {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-size: 11px;
     margin-bottom: 8px;
     letter-spacing: 1.5px;
@@ -333,6 +492,13 @@ html {
     color: var(--slime-crimson-bright);
 }
 
+/* Label icon pixel square */
+.form-label::before {
+    content: '▸';
+    font-size: 10px;
+    opacity: 0.7;
+}
+
 .form-input {
     width: 100%;
     background-color: #0d1013;
@@ -340,18 +506,61 @@ html {
     color: #ffffff;
     font-family: inherit;
     font-size: 14px;
-    padding: 12px;
+    padding: 12px 12px 12px 36px;
     outline: none;
+    transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+}
+
+/* Input icon wrapper */
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 0.15s;
+}
+
+.input-wrapper:focus-within .input-icon {
+    opacity: 0.9;
 }
 
 .modal-overlay.mode-login .form-input:focus {
     border-color: var(--glow-teal);
-    background-color: #11151a;
+    background-color: #0d1510;
+    box-shadow: inset 0 0 0 1px rgba(74, 180, 69, 0.2), 0 0 12px rgba(74, 180, 69, 0.1);
 }
 
 .modal-overlay.mode-register .form-input:focus {
     border-color: var(--slime-crimson);
-    background-color: #161211;
+    background-color: #130d0a;
+    box-shadow: inset 0 0 0 1px rgba(193, 78, 43, 0.2), 0 0 12px rgba(193, 78, 43, 0.1);
+}
+
+/* Password strength bar */
+.strength-bar-wrap {
+    height: 3px;
+    background: #1e2530;
+    margin-top: 6px;
+    display: none;
+    overflow: hidden;
+}
+
+.modal-overlay.mode-register .strength-bar-wrap {
+    display: block;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    background: #526075;
+    transition: width 0.3s ease, background 0.3s ease;
 }
 
 .form-toggle-prompt {
@@ -365,6 +574,7 @@ html {
     color: #ffffff;
     cursor: pointer;
     text-decoration: underline;
+    transition: color 0.15s;
 }
 
 .modal-overlay.mode-login .form-toggle-prompt span:hover {
@@ -375,9 +585,33 @@ html {
     color: var(--slime-crimson);
 }
 
-/* ─────────────────────────────────────────────
-            CUSTOM IN-GAME NOTIFICATION TOAST PIPELINE
-           ───────────────────────────────────────────── */
+/* ─── LOADING STATE ─── */
+.btn-pixel.loading {
+    pointer-events: none;
+    position: relative;
+    color: transparent;
+}
+
+.btn-pixel.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── TOAST ─── */
 .toast-container {
     position: fixed;
     top: 20px;
@@ -403,12 +637,53 @@ html {
 
 .toast-container.toast-success {
     border: var(--pixel-size) solid var(--glow-teal);
-    box-shadow: 0 0 20px rgba(0, 255, 204, 0.2), 0 calc(var(--pixel-size) * -1) 0 0 #000, 0 var(--pixel-size) 0 0 #000, calc(var(--pixel-size) * -1) 0 0 0 #000, var(--pixel-size) 0 0 0 #000;
+    box-shadow: 0 0 20px rgba(74, 180, 69, 0.25),
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000;
 }
 
 .toast-container.toast-error {
     border: var(--pixel-size) solid var(--slime-crimson);
-    box-shadow: 0 0 20px rgba(222, 70, 19, 0.3), 0 calc(var(--pixel-size) * -1) 0 0 #000, 0 var(--pixel-size) 0 0 #000, calc(var(--pixel-size) * -1) 0 0 0 #000, var(--pixel-size) 0 0 0 #000;
+    box-shadow: 0 0 20px rgba(193, 78, 43, 0.3),
+        0 calc(var(--pixel-size) * -1) 0 0 #000,
+        0 var(--pixel-size) 0 0 #000,
+        calc(var(--pixel-size) * -1) 0 0 0 #000,
+        var(--pixel-size) 0 0 0 #000;
+}
+
+/* Pixel-progress bar on toast */
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: currentColor;
+    width: 100%;
+    transform-origin: left;
+}
+
+.toast-container.toast-success .toast-progress {
+    color: var(--glow-teal);
+}
+
+.toast-container.toast-error .toast-progress {
+    color: var(--slime-crimson);
+}
+
+.toast-container.active .toast-progress {
+    animation: toastProgress 4.5s linear forwards;
+}
+
+@keyframes toastProgress {
+    0% {
+        transform: scaleX(1);
+    }
+
+    100% {
+        transform: scaleX(0);
+    }
 }
 
 .toast-title {
@@ -416,6 +691,14 @@ html {
     font-size: 14px;
     margin-bottom: 6px;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toast-title::before {
+    content: '►';
+    font-size: 10px;
 }
 
 .toast-success .toast-title {

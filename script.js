@@ -19,19 +19,14 @@ var y = 95;
 var held_directions = [];
 var isSprinting  = false;
 var baseSpeed    = 0.5  ;
-var sprintSpeed  = 1;
-var charSize     = 8;   // collision half-box in game units
+var sprintSpeed  = 1    ;
+var charSize     = 8    ;
 
 // ─── GAME STATE ────────────────────────────────────────────────────────────
 var hasKey       = false;
 var keyCollected = false;
 
-// Key position in game units (matches --ax:355px --ay:1250px, sprite 45px = 9gu)
-// centre: ax/5 + half_sprite = 355/5 + 4.5 = 71+4.5 ≈ 72
-//         ay/5 + half_sprite = 1250/5 + 4.5 = 250+4.5 ≈ 255
-const KEY_GU = { x: 50, y: 255, r: 8 }; // centre + pickup radius in game units
-
-// Cave door — placeholder coords; update x/y when the cave asset is placed.
+const KEY_GU = { x: 50, y: 255, r: 8 };
 const CAVE_GU = { x: 490, y: 55, r: 12 };
 
 var nearCave = false;
@@ -137,7 +132,6 @@ const overlaps = (ax, ay, aw, ah, bx, by, bw, bh) =>
     ay + ah/2 > by - bh/2;
 
 // ─── BUSH DATA for fade-behind effect ──────────────────────────────────────
-// Pre-compute bush centres in game units from their --ax/--ay inline styles
 const bushData = [];
 bushElements.forEach(el => {
     const style   = el.getAttribute("style") || "";
@@ -220,7 +214,6 @@ const placeCharacter = () => {
     });
 
     // Bush hide-behind effect: if player overlaps bush AND player y > bush centre y
-    // (player is "behind" = visually in front of bush), fade the bush
     bushData.forEach(b => {
         // Expand overlap check slightly so it feels natural
         const behind = overlaps(x, y, charSize + 4, charSize + 4, b.cx, b.cy, b.w, b.h)
@@ -251,8 +244,6 @@ const placeCharacter = () => {
                 setTimeout(() => hudKey.classList.remove("pickup-flash"), 600);
             }
         }
-
-    
     }
 
     // ── CAVE PROXIMITY ────────────────────────────────────────────────────
@@ -275,6 +266,7 @@ const step = () => {
 };
 step();
 
+
 // ─── INPUT ────────────────────────────────────────────────────────────────
 document.addEventListener("keydown", (e) => {
     if (e.which === 16) isSprinting = true;
@@ -289,6 +281,7 @@ document.addEventListener("keyup", (e) => {
     if (idx > -1) held_directions.splice(idx, 1);
 });
 
+
 // ─── CAVE ENTRY (E key) ───────────────────────────────────────────────────
 document.addEventListener("keydown", (e) => {
     if ((e.key === "e" || e.key === "E") && nearCave && hasKey) {
@@ -301,7 +294,7 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// ─── DEBUG (toggle with ` key) ─────────────────────────────────────────────
+// ─── DEBUG (toggle with / key) ─────────────────────────────────────────────
 let debugOn = false;
 let debugBoxes = [];
 
@@ -327,7 +320,6 @@ const drawDebug = () => {
         debugBoxes.push(box);
     });
 
-    // bush centres
     bushData.forEach(b => {
         const dot = document.createElement("div");
         dot.style.cssText = `
@@ -354,3 +346,36 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
+
+// ─── TUTORIAL MODAL ───────────────────────────────────────────────────────
+(function () {
+    const overlay = document.getElementById("tutorial_overlay");
+    const btn     = document.getElementById("tutorial_start_btn");
+    if (!overlay || !btn) return;
+
+    let tutorialOpen = true;
+
+    function closeTutorial() {
+        if (!tutorialOpen) return;
+        tutorialOpen = false;
+        overlay.classList.add("hiding");
+        overlay.addEventListener("animationend", () => overlay.remove(), { once: true });
+    }
+
+    btn.addEventListener("click", closeTutorial);
+
+    document.addEventListener("keydown", (e) => {
+        if (tutorialOpen && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            closeTutorial();
+        }
+    }, { capture: true });
+
+    const _origKeydown = document.onkeydown;
+    document.addEventListener("keydown", (e) => {
+        if (tutorialOpen) {
+            const movementKeys = [37,38,39,40,87,65,83,68,16];
+            if (movementKeys.includes(e.which)) e.stopImmediatePropagation();
+        }
+    }, { capture: true });
+})();
