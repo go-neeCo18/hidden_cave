@@ -719,7 +719,7 @@ body {
 /* Landscape phone (e.g. iPhone rotated, max-height ~430px) */
 @media (orientation: landscape) and (max-height: 430px) and (pointer: coarse) {
     :root {
-        --pixel-size: 2px;
+        --pixel-size: 5px;
     }
 
     .health-bar {
