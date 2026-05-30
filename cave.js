@@ -483,3 +483,77 @@ const drawDebug = () => {
 document.addEventListener("keydown", (e) => {
     if (e.key === "/") { debugOn = !debugOn; drawDebug(); }
 });
+// ─── TOUCH EXIT BUTTON ────────────────────────────────────────────────────
+const caveExitBtn = document.getElementById("cave_exit_btn");
+
+// Patch checkExit to also show/hide the touch button
+const _origCheckExit = checkExit;
+checkExit = function(px, py) {
+    _origCheckExit(px, py);
+    if (caveExitBtn) {
+        if (nearExit && playerStatus === "alive") {
+            caveExitBtn.classList.remove("hidden");
+        } else {
+            caveExitBtn.classList.add("hidden");
+        }
+    }
+};
+
+if (caveExitBtn) {
+    caveExitBtn.addEventListener("click", () => {
+        if (nearExit && playerStatus === "alive") {
+            window.location.href = "main.html";
+        }
+    });
+}
+
+// ─── TOUCH D-PAD ──────────────────────────────────────────────────────────
+(function () {
+    const dpad = document.getElementById("dpad");
+    if (!dpad) return;
+
+    const pointerToDir = new Map();
+
+    function startDir(dir, pointerId) {
+        if (held_directions.indexOf(dir) === -1) held_directions.unshift(dir);
+        pointerToDir.set(pointerId, dir);
+    }
+
+    function endDir(pointerId) {
+        const d = pointerToDir.get(pointerId);
+        if (!d) return;
+        pointerToDir.delete(pointerId);
+        const idx = held_directions.indexOf(d);
+        if (idx > -1) held_directions.splice(idx, 1);
+    }
+
+    dpad.querySelectorAll(".dpad_btn").forEach(btn => {
+        const dir = btn.dataset.dir;
+
+        btn.addEventListener("pointerdown", (e) => {
+            e.preventDefault();
+            btn.setPointerCapture(e.pointerId);
+            btn.classList.add("dpad_pressed");
+            startDir(dir, e.pointerId);
+        });
+
+        btn.addEventListener("pointerup", (e) => {
+            e.preventDefault();
+            btn.classList.remove("dpad_pressed");
+            endDir(e.pointerId);
+        });
+
+        btn.addEventListener("pointercancel", (e) => {
+            btn.classList.remove("dpad_pressed");
+            endDir(e.pointerId);
+        });
+    });
+
+    // Double-tap to toggle sprint
+    let lastTap = 0;
+    dpad.addEventListener("pointerdown", () => {
+        const now = Date.now();
+        if (now - lastTap < 300) isSprinting = !isSprinting;
+        lastTap = now;
+    });
+})();

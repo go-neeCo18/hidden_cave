@@ -24,13 +24,13 @@
         <div class="go-box pixel-art">
             <h1 class="go-title">DIED INSIDE THE CAVE</h1>
             <p class="go-subtitle">Your journey has ended here.</p>
-    
+
             <div class="go-menu">
                 <div class="go-option active" data-action="respawn">
-                    <span class="pointer">▶</span> TRY AGAIN <kbd>↵ Enter</kbd>
+                    <span class="pointer">â¶</span> TRY AGAIN <kbd>âµ Enter</kbd>
                 </div>
                 <div class="go-option" data-action="exit">
-                    <span class="pointer">▶</span> RETURN TO SURFACE <kbd>Esc</kbd>
+                    <span class="pointer">â¶</span> RETURN TO SURFACE <kbd>Esc</kbd>
                 </div>
             </div>
         </div>
@@ -78,6 +78,24 @@
             </div>
         </div>
     </div>
+    <!-- Touch D-PAD (landscape phones & tablets) -->
+    <div class="dpad" id="dpad">
+        <div class="dpad_row">
+            <button class="dpad_btn dpad_up" data-dir="up" aria-label="Up">&#x25B2;</button>
+        </div>
+        <div class="dpad_row">
+            <button class="dpad_btn dpad_left" data-dir="left" aria-label="Left">&#x25C4;</button>
+            <div class="dpad_center"></div>
+            <button class="dpad_btn dpad_right" data-dir="right" aria-label="Right">&#x25BA;</button>
+        </div>
+        <div class="dpad_row">
+            <button class="dpad_btn dpad_down" data-dir="down" aria-label="Down">&#x25BC;</button>
+        </div>
+    </div>
+
+    <!-- Touch exit button -->
+    <button id="cave_exit_btn" class="hidden" aria-label="Exit cave">&#x1F6AA;&nbsp;&nbsp;Exit Cave</button>
+
     <script src="cave.js"></script>
 </body>
 

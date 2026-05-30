@@ -35,6 +35,7 @@ var nearCave = false;
 const keyContainer = document.getElementById("key_container");
 const hudKey       = document.getElementById("hud_key");
 const cavePrompt   = document.getElementById("cave_prompt");
+const caveBtn      = document.getElementById("cave_btn");
 
 const popup = document.getElementById("pop_up");
 const pop_up_content = document.getElementById("pop_up_content");
@@ -251,13 +252,20 @@ const placeCharacter = () => {
     const cdy = y - CAVE_GU.y;
     const wasNearCave = nearCave;
     nearCave = Math.sqrt(cdx*cdx + cdy*cdy) < CAVE_GU.r;
-    if (nearCave !== wasNearCave && cavePrompt) {
-        if (nearCave && hasKey) {
-            cavePrompt.classList.remove("hidden");
-        } else {
-            cavePrompt.classList.add("hidden");
-        }
+    if (nearCave !== wasNearCave) {
+
+    if (nearCave && hasKey) {
+
+        cavePrompt?.classList.remove("hidden");
+        caveBtn?.classList.remove("hidden");
+
+    } else {
+
+        cavePrompt?.classList.add("hidden");
+        caveBtn?.classList.add("hidden");
+
     }
+}
 };
 
 const step = () => {
@@ -292,6 +300,20 @@ document.addEventListener("keydown", (e) => {
         console.log("[cave] Player entered the cave!");
         // Example: dispatchEvent(new CustomEvent("enterCave"));
     }
+});
+
+caveBtn?.addEventListener("click", () => {
+
+    if (!nearCave || !hasKey) return;
+
+    hasKey = false;
+
+    cavePrompt?.classList.add("hidden");
+    caveBtn?.classList.add("hidden");
+    hudKey?.classList.add("hidden");
+
+    window.location.href = "cave.html";
+
 });
 
 // ─── DEBUG (toggle with / key) ─────────────────────────────────────────────
@@ -347,6 +369,8 @@ document.addEventListener("keydown", (e) => {
 });
 
 
+
+
 // ─── TUTORIAL MODAL ───────────────────────────────────────────────────────
 (function () {
     const overlay = document.getElementById("tutorial_overlay");
@@ -384,22 +408,11 @@ document.addEventListener("keydown", (e) => {
     const dpad = document.getElementById("dpad");
     if (!dpad) return;
 
-    // Map data-dir → direction string
-    const DIR_MAP = {
-        up: directions.up,
-        down: directions.down,
-        left: directions.left,
-        right: directions.right,
-    };
-
-    // Track which buttons are currently pressed (by pointerId)
     const pointerToDir = new Map();
 
     function startDir(dir, pointerId) {
-        if (!DIR_MAP[dir]) return;
-        const d = DIR_MAP[dir];
-        if (held_directions.indexOf(d) === -1) held_directions.unshift(d);
-        pointerToDir.set(pointerId, d);
+        if (held_directions.indexOf(dir) === -1) held_directions.unshift(dir);
+        pointerToDir.set(pointerId, dir);
     }
 
     function endDir(pointerId) {
@@ -432,13 +445,11 @@ document.addEventListener("keydown", (e) => {
         });
     });
 
-    // Sprint: double-tap any d-pad button to toggle sprint on mobile
+    // Double-tap any D-pad button to toggle sprint
     let lastTap = 0;
-    dpad.addEventListener("pointerdown", (e) => {
+    dpad.addEventListener("pointerdown", () => {
         const now = Date.now();
-        if (now - lastTap < 300) {
-            isSprinting = !isSprinting;
-        }
+        if (now - lastTap < 300) isSprinting = !isSprinting;
         lastTap = now;
     });
 })();

@@ -1099,6 +1099,8 @@ body {
     font-family: "consolas", monospace;
 }
 
+
+
 /* ════════════════════════════════════════════════
    MEDIA QUERIES — landscape phones & tablets only
    Targets: orientation:landscape + touch screen sizes
@@ -1108,7 +1110,7 @@ body {
 /* Landscape tablet — e.g. iPad landscape (1024×768, 1180×820) */
 @media (orientation: landscape) and (max-width: 1366px) and (max-height: 1024px) and (pointer: coarse) {
     :root {
-        --pixel-size: 3px;
+        --pixel-size: 5px;
     }
 
     .hud_item {
@@ -1241,14 +1243,6 @@ body {
         margin: 8px;
         padding: 4px 8px 4px 6px;
     }
-
-    /* Cave prompt sits above D-pad */
-    #cave_prompt {
-        font-size: 11px;
-        bottom: 130px;
-        padding: 6px 14px;
-    }
-
     /* Popups */
     .pop_up_content {
         padding: 18px 16px;
@@ -1272,6 +1266,8 @@ body {
         border-radius: 12px;
     }
 }
+
+
 
 /* ════════════════════════════════════════════════
    TOUCH D-PAD
@@ -1399,3 +1395,98 @@ body {
         height: 56px;
     }
 }
+
+/* ── Cave prompt ── */
+#cave_prompt {
+    position: fixed;
+    bottom: 72px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-family: "consolas", monospace;
+    font-size: 15px;
+    color: #fff;
+    z-index: 20;
+    pointer-events: none;
+    animation: promptBob 1.2s ease-in-out infinite;
+}
+
+#cave_prompt kbd {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Hide mobile button by default on desktops / portrait mode */
+
+
+/* ════════════════════════════════════════════════
+   TOUCH RESPONSIVE OVERRIDES
+════════════════════════════════════════════════ */
+
+/* Only display and structure the button layout on touch landscape mobile devices */
+@media (orientation: landscape) and (pointer: coarse) {
+    #cave_btn:not(.hidden) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Hide desktop prompt only on touch devices */
+    #cave_prompt {
+        display: none !important;
+    }
+
+        #cave_btn {
+            position: fixed;
+            left: 50%;
+            bottom: 80px;
+            transform: translateX(-50%);
+        }
+    
+        /* Base styling rules for the cave action button */
+        #cave_btn:not(.hidden) {
+            /* Define baseline styles here so they don't break when unhidden */
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(180deg, #3b3a38 0%, #333333 100%);
+            color: #fff;
+            font-family: "consolas", monospace;
+            font-weight: 900;
+            z-index: 99;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            font-size: 20px;
+        }
+    
+        @keyframes promptBob {
+    
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+    
+            50% {
+                transform: translateX(-50%) translateY(-4px);
+            }
+        }
+}
+
+/* Landscape phone adjustments — smaller bounding box to stay clean */
+@media (orientation: landscape) and (max-height: 430px) and (pointer: coarse) {
+    #cave_btn:not(.hidden) {
+        height: 42px;
+        font-size: 13px;
+        padding: 0 20px;
+        bottom: 25px;
+        border-radius: 10px;
+    }
+}   
