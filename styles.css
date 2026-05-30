@@ -1163,6 +1163,10 @@ body {
         --pixel-size: 5px;
     }
 
+    .camera {
+        border-radius: 0;
+    }
+
     /* Tutorial: two-column layout so it fits the short landscape screen */
     .tutorial_panel {
         width: 90vw;
