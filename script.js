@@ -379,3 +379,66 @@ document.addEventListener("keydown", (e) => {
         }
     }, { capture: true });
 })();
+// ─── TOUCH D-PAD ──────────────────────────────────────────────────────────
+(function () {
+    const dpad = document.getElementById("dpad");
+    if (!dpad) return;
+
+    // Map data-dir → direction string
+    const DIR_MAP = {
+        up: directions.up,
+        down: directions.down,
+        left: directions.left,
+        right: directions.right,
+    };
+
+    // Track which buttons are currently pressed (by pointerId)
+    const pointerToDir = new Map();
+
+    function startDir(dir, pointerId) {
+        if (!DIR_MAP[dir]) return;
+        const d = DIR_MAP[dir];
+        if (held_directions.indexOf(d) === -1) held_directions.unshift(d);
+        pointerToDir.set(pointerId, d);
+    }
+
+    function endDir(pointerId) {
+        const d = pointerToDir.get(pointerId);
+        if (!d) return;
+        pointerToDir.delete(pointerId);
+        const idx = held_directions.indexOf(d);
+        if (idx > -1) held_directions.splice(idx, 1);
+    }
+
+    dpad.querySelectorAll(".dpad_btn").forEach(btn => {
+        const dir = btn.dataset.dir;
+
+        btn.addEventListener("pointerdown", (e) => {
+            e.preventDefault();
+            btn.setPointerCapture(e.pointerId);
+            btn.classList.add("dpad_pressed");
+            startDir(dir, e.pointerId);
+        });
+
+        btn.addEventListener("pointerup", (e) => {
+            e.preventDefault();
+            btn.classList.remove("dpad_pressed");
+            endDir(e.pointerId);
+        });
+
+        btn.addEventListener("pointercancel", (e) => {
+            btn.classList.remove("dpad_pressed");
+            endDir(e.pointerId);
+        });
+    });
+
+    // Sprint: double-tap any d-pad button to toggle sprint on mobile
+    let lastTap = 0;
+    dpad.addEventListener("pointerdown", (e) => {
+        const now = Date.now();
+        if (now - lastTap < 300) {
+            isSprinting = !isSprinting;
+        }
+        lastTap = now;
+    });
+})();
