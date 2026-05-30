@@ -38,7 +38,7 @@ html {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url('input_file_3.png');
+    background-image: url('assets/ui/background.png');
     background-size: cover;
     background-position: center;
     image-rendering: pixelated;
@@ -140,20 +140,19 @@ html {
 }
 
 .game-subtitle {
-    font-size: 13px;
-    color: var(--slime-crimson);
-    letter-spacing: 5px;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
     text-transform: uppercase;
     margin-top: 20px;
     font-weight: bold;
-    text-shadow: 0 0 10px rgba(222, 70, 19, 0.6);
+    text-shadow: 0 0 10px rgba(0, 10, 4, 0.871);
     animation: subtitlePulse 2.5s infinite alternate ease-in-out;
 }
 
 @keyframes subtitlePulse {
     0% {
         opacity: 0.7;
-        letter-spacing: 5px;
+        letter-spacing: 3px;
     }
 
     100% {
@@ -294,7 +293,7 @@ html {
 /* ─── FOOTER ─── */
 .footer-credits {
     font-size: 11px;
-    color: #526075;
+    color: #ffffff;
     text-align: center;
     letter-spacing: 2px;
 }
